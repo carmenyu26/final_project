@@ -16,12 +16,13 @@ SHOW VARIABLES LIKE '%local%';
 -- ------ Create Tables ------
 
 -- Organism
--- DROP TABLE IF EXISTS organism;
--- CREATE TABLE organism (
--- 	organism_id INT PRIMARY KEY AUTO_INCREMENT,
---     organism_name VARCHAR(55),
---     taxonomy VARCHAR(55)
--- );
+ DROP TABLE IF EXISTS organism;
+ CREATE TABLE organism (
+ 	organism_id INT PRIMARY KEY AUTO_INCREMENT,
+     organism_name VARCHAR(55),
+     taxonomy VARCHAR(55)
+ );
+
 
 
 -- PATHWAY TABLE
@@ -30,6 +31,35 @@ CREATE TABLE pathway (
 	pathway_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     pathway_name VARCHAR(55),
     description VARCHAR(55)
+
+-- Reactions
+ DROP TABLE IF EXISTS reaction;
+ CREATE TABLE reaction (
+ 	reaction_id INT PRIMARY KEY,
+     reaction_name VARCHAR(55) NOT NULL,
+     lower_bound INT,
+     upper_bound INT,
+     is_reversible TINYINT
+ );
+ 
+-- Genes
+ DROP TABLE IF EXISTS gene;
+ CREATE TABLE gene (
+	gene_id INT PRIMARY KEY,
+    organism_id INT,
+    gene_name VARCHAR(45),
+    gene_function VARCHAR(45),
+    CONSTRAINT gene_organism_fk FOREIGN KEY (organism_id) references organism (organism_id)
+);
+
+-- Metabolite
+DROP TABLE IF EXISTS metabolite;
+CREATE TABLE metabolite (
+	metabolite_id INT PRIMARY KEY,
+    metabolite_name VARCHAR(45),
+    formula VARCHAR(45),
+    charge VARCHAR(45),
+    compartment VARCHAR(45)
 );
 
 -- Insert values into pathway table
