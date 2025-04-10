@@ -37,7 +37,17 @@ CREATE TABLE reaction (
     objective_coefficient INT
 );
 
-
-DROP TABLE reaction;
+-- check reaction table
+DROP TABLE IF EXISTS reaction;
 SELECT * FROM reaction;
 SELECT COUNT(*) FROM reaction;
+
+-- check metabolite table
+DROP TABLE IF EXISTS metabolite;
+SELECT * FROM metabolite;
+SELECT COUNT(*) FROM metabolite;
+
+-- check gene table
+DROP TABLE IF EXISTS gene;
+SELECT * FROM gene;
+SELECT COUNT(*) FROM gene;
