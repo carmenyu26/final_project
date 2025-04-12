@@ -12,6 +12,20 @@ SHOW VARIABLES;
 SHOW VARIABLES LIKE '%local%';
 -- SET GLOBAL local_infile=ON;
 
+
+-- drop
+DROP TABLE IF EXISTS pathway_rxn_join;
+DROP TABLE IF EXISTS rxn_gene_join;
+DROP TABLE IF EXISTS rxn_met_join;
+DROP TABLE IF EXISTS reaction;
+DROP TABLE IF EXISTS organism;
+DROP TABLE IF EXISTS pathway;
+DROP TABLE IF EXISTS metabolite;
+DROP TABLE IF EXISTS gene;
+
+
+
+
 -- ignore
 TRUNCATE organism;
 TRUNCATE pathway;
@@ -159,7 +173,7 @@ CREATE TABLE rxn_gene_join (
 );
 
 -- Insert values
-
+SELECT * FROM rxn_gene_join;
 
 
 
@@ -174,7 +188,7 @@ CREATE TABLE rxn_met_join (
 );
 
 -- Insert values
-
+SELECT * FROM rxn_met_join;
 
 
 
