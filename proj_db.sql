@@ -31,6 +31,19 @@ CREATE TABLE pathway (
 	pathway_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     pathway_name VARCHAR(55),
     description VARCHAR(55)
+);
+
+-- Insert values into pathway table
+INSERT INTO pathway VALUES
+(1, 'Glycolysis', NULL),
+(2, 'Calvin Cycle', NULL),
+(3, 'Electron Transport Chain', NULL),
+(4, 'Urea Cycle', NULL),
+(5, 'Fermentation', NULL);
+
+-- Check pathway table
+SELECT * FROM pathway;
+
 
 -- Reactions
  DROP TABLE IF EXISTS reaction;
@@ -62,25 +75,14 @@ CREATE TABLE metabolite (
     compartment VARCHAR(45)
 );
 
--- Insert values into pathway table
-INSERT INTO pathway VALUES
-(1, 'Glycolysis', NULL),
-(2, 'Calvin Cycle', NULL),
-(3, 'Electron Transport Chain', NULL),
-(4, 'Urea Cycle', NULL),
-(5, 'Fermentation', NULL);
-
--- Check pathway table
-SELECT * FROM pathway;
-
 
 -- REACTION TABLE
 DROP TABLE IF EXISTS reaction;
 CREATE TABLE reaction (
-	reaction_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+	id_num INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     letter_id VARCHAR(55) NOT NULL,
     reaction_name VARCHAR(55) NOT NULL,
-    pathway_id INT NOT NULL,
+    pathway_id INT,
     CONSTRAINT reaction_pathway_fk FOREIGN KEY (pathway_id) REFERENCES pathway(pathway_id)
 );
 
@@ -88,8 +90,6 @@ CREATE TABLE reaction (
 
 -- Check reaction table
 SELECT * FROM reaction;
-
-
 
 
 
@@ -105,7 +105,5 @@ DROP TABLE IF EXISTS gene;
 SELECT * FROM gene;
 SELECT COUNT(*) FROM gene;
 
--- check pathway table
-SELECT * FROM pathway;
 
 
