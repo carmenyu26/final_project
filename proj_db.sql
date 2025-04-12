@@ -14,14 +14,14 @@ SHOW VARIABLES LIKE '%local%';
 
 
 -- drop
-DROP TABLE IF EXISTS pathway_rxn_join;
-DROP TABLE IF EXISTS rxn_gene_join;
-DROP TABLE IF EXISTS rxn_met_join;
-DROP TABLE IF EXISTS reaction;
-DROP TABLE IF EXISTS pathway;
-DROP TABLE IF EXISTS metabolite;
-DROP TABLE IF EXISTS gene;
-DROP TABLE IF EXISTS organism;
+-- DROP TABLE IF EXISTS pathway_rxn_join;
+-- DROP TABLE IF EXISTS rxn_gene_join;
+-- DROP TABLE IF EXISTS rxn_met_join;
+-- DROP TABLE IF EXISTS reaction;
+-- DROP TABLE IF EXISTS pathway;
+-- DROP TABLE IF EXISTS metabolite;
+-- DROP TABLE IF EXISTS gene;
+-- DROP TABLE IF EXISTS organism;
 
 
 
@@ -111,16 +111,6 @@ CREATE TABLE reaction (
 SELECT * FROM reaction;
 
 
--- show all tables
-SELECT * FROM organism;
-SELECT * FROM pathway;
-SELECT * FROM gene;
-SELECT * FROM metabolite;
-SELECT * FROM reaction;
-SELECT * FROM pathway_rxn_join;
-SELECT * FROM rxn_gene_join;
-SELECT * FROM rxn_met_join;
-
 
 
 
@@ -194,6 +184,16 @@ CREATE TABLE rxn_met_join (
 SELECT * FROM rxn_met_join;
 
 
+
+-- show all tables
+SELECT * FROM organism;
+SELECT * FROM pathway;
+SELECT * FROM gene;
+SELECT * FROM metabolite;
+SELECT * FROM reaction;
+SELECT * FROM pathway_rxn_join;
+SELECT * FROM rxn_gene_join;
+SELECT * FROM rxn_met_join;
 
 
 
