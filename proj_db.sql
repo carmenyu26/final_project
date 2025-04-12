@@ -14,14 +14,14 @@ SHOW VARIABLES LIKE '%local%';
 
 
 -- drop
--- DROP TABLE IF EXISTS pathway_rxn_join;
--- DROP TABLE IF EXISTS rxn_gene_join;
--- DROP TABLE IF EXISTS rxn_met_join;
--- DROP TABLE IF EXISTS reaction;
--- DROP TABLE IF EXISTS pathway;
--- DROP TABLE IF EXISTS metabolite;
--- DROP TABLE IF EXISTS gene;
--- DROP TABLE IF EXISTS organism;
+DROP TABLE IF EXISTS pathway_rxn_join;
+DROP TABLE IF EXISTS rxn_gene_join;
+DROP TABLE IF EXISTS rxn_met_join;
+DROP TABLE IF EXISTS reaction;
+DROP TABLE IF EXISTS pathway;
+DROP TABLE IF EXISTS metabolite;
+DROP TABLE IF EXISTS gene;
+DROP TABLE IF EXISTS organism;
 
 
 
@@ -59,7 +59,7 @@ CREATE TABLE pathway (
 -- Insert values into pathway table
 INSERT INTO pathway VALUES
 (1, 'Glycolysis', 'Breaks down glucose into two molecules of pyruvate, generating energy in the form of ATP and NADH.'),
-(2, 'Calvin Cycle', 'Uses energy from ATP and NADPH to convert carbon dioxide (CO₂) into glucose.'),
+(2, 'Krebs Cycle', 'Breaks down acetyl-CoA into carbon dioxide, while generating NADH, FADH₂, and ATP (or GTP).'),
 (3, 'Electron Transport Chain', 'Final stage of cellular respiration, where most of the cell’s ATP is produced.'),
 (4, 'Urea Cycle', 'Detoxifies ammonia by converting it into urea, which is then excreted in the urine.'),
 (5, 'Fermentation', 'Anaerobic process that allows cells to produce (ATP) in the absence of oxygen by converting glucose into other byproducts, such as lactic acid or ethanol.');
