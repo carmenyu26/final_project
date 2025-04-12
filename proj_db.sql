@@ -18,10 +18,10 @@ DROP TABLE IF EXISTS pathway_rxn_join;
 DROP TABLE IF EXISTS rxn_gene_join;
 DROP TABLE IF EXISTS rxn_met_join;
 DROP TABLE IF EXISTS reaction;
-DROP TABLE IF EXISTS organism;
 DROP TABLE IF EXISTS pathway;
 DROP TABLE IF EXISTS metabolite;
 DROP TABLE IF EXISTS gene;
+DROP TABLE IF EXISTS organism;
 
 
 
@@ -101,8 +101,8 @@ SELECT * FROM metabolite;
 DROP TABLE IF EXISTS reaction;
 CREATE TABLE reaction (
 	reaction_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    reaction_letter_id VARCHAR(15) NOT NULL,
-    reaction_name VARCHAR(65) NOT NULL,
+    reaction_letter_id VARCHAR(90) NOT NULL,
+    reaction_name VARCHAR(255) NOT NULL,
     organism_id INT,
     CONSTRAINT rxn_org_fk FOREIGN KEY (organism_id) REFERENCES organism (organism_id)
 );
@@ -117,6 +117,9 @@ SELECT * FROM pathway;
 SELECT * FROM gene;
 SELECT * FROM metabolite;
 SELECT * FROM reaction;
+SELECT * FROM pathway_rxn_join;
+SELECT * FROM rxn_gene_join;
+SELECT * FROM rxn_met_join;
 
 
 
