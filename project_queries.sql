@@ -17,23 +17,29 @@ SELECT * FROM org_gene_join;
 SHOW TABLES; 
 
 
+
 -- Query 1
 WITH reaction_coverage AS (
     SELECT 
         o.organism_name,
-        SUM(CASE WHEN r.reaction_name IN ('R_FBA','R_ENO','R_G3PD2','R_F6PA','R_F6PP') THEN 0 ELSE 1 END) * 20 AS glycolysis_cov,
-        SUM(CASE WHEN r.reaction_name IN ('R_FBP','R_FBA','R_F6PA','R_F6PP','R_F6Pt6_2pp') THEN 0 ELSE 1 END) * 20 AS krebs_cycle_cov,
-        SUM(CASE WHEN r.reaction_name IN ('R_CYTBO3_4pp','R_FDH4pp','R_FDH5pp','R_FLDR','R_FLVR') THEN 0 ELSE 1 END) * 20 AS etc_cov,
-        SUM(CASE WHEN r.reaction_name IN ('R_ARGSS','R_ARGSL','R_ACOTA','R_ARGDC','R_ARGORNt7pp') THEN 0 ELSE 1 END) * 20 AS urea_cycle_cov,
-        SUM(CASE WHEN r.reaction_name IN ('R_ACALD','R_ACKr','R_FHL','R_ALDD2y','R_ETOHtex') THEN 0 ELSE 1 END) * 20 AS ferment_cov
+        (COUNT(DISTINCT r.reaction_name) - COUNT(DISTINCT ex_glycolysis.reaction_name) * 20) AS glycolysis_cov,
+        (COUNT(DISTINCT r.reaction_name) - COUNT(DISTINCT ex_krebs.reaction_name) * 20) AS krebs_cycle_cov,
+        (COUNT(DISTINCT r.reaction_name) - COUNT(DISTINCT ex_etc.reaction_name) * 20) AS etc_cov,
+        (COUNT(DISTINCT r.reaction_name) - COUNT(DISTINCT ex_urea.reaction_name) * 20) AS urea_cycle_cov,
+        (COUNT(DISTINCT r.reaction_name) - COUNT(DISTINCT ex_ferment.reaction_name) * 20) AS ferment_cov
     FROM organism o
     JOIN rxn_org_join ro ON ro.organism_id = o.organism_id
     JOIN reaction r ON r.reaction_id = ro.reaction_id
+    LEFT JOIN reaction ex_glycolysis ON ex_glycolysis.reaction_name IN ('R_FBA','R_ENO','R_G3PD2','R_F6PA','R_F6PP') AND ex_glycolysis.reaction_id = r.reaction_id
+    LEFT JOIN reaction ex_krebs ON ex_krebs.reaction_name IN ('R_FBP','R_FBA','R_F6PA','R_F6PP','R_F6Pt6_2pp') AND ex_krebs.reaction_id = r.reaction_id
+    LEFT JOIN reaction ex_etc ON ex_etc.reaction_name IN ('R_CYTBO3_4pp','R_FDH4pp','R_FDH5pp','R_FLDR','R_FLVR') AND ex_etc.reaction_id = r.reaction_id
+    LEFT JOIN reaction ex_urea ON ex_urea.reaction_name IN ('R_ARGSS','R_ARGSL','R_ACOTA','R_ARGDC','R_ARGORNt7pp') AND ex_urea.reaction_id = r.reaction_id
+    LEFT JOIN reaction ex_ferment ON ex_ferment.reaction_name IN ('R_ACALD','R_ACKr','R_FHL','R_ALDD2y','R_ETOHtex') AND ex_ferment.reaction_id = r.reaction_id
     GROUP BY o.organism_name
 )
 SELECT
     organism_name,
-    (glycolysis_cov + krebs_cycle_cov + etc_cov + urea_cycle_cov + ferment_cov) / 5000 AS avg_coverage
+    ROUND((glycolysis_cov + krebs_cycle_cov + etc_cov + urea_cycle_cov + ferment_cov) / 500, 2) AS avg_coverage
 FROM reaction_coverage
 ORDER BY avg_coverage DESC;
 
@@ -43,12 +49,11 @@ ORDER BY avg_coverage DESC;
 -- Query 2
 SELECT
     o.organism_name,
-    SUM(CASE WHEN r.reaction_letter_id IN ('R_ACKr', 'R_ENO', 'R_FBP', 'R_PFOR') 
-			 THEN 1 
-             ELSE 0 END) AS oxygen_labile_count
+    COUNT(r.reaction_letter_id) AS oxygen_labile_count
 FROM organism o
 LEFT JOIN rxn_org_join ro ON o.organism_id = ro.organism_id
 LEFT JOIN reaction r ON ro.reaction_id = r.reaction_id
+    AND r.reaction_letter_id IN ('R_ACKr', 'R_ENO', 'R_FBP', 'R_PFOR')
 GROUP BY o.organism_name
 ORDER BY oxygen_labile_count DESC;
 
@@ -73,7 +78,7 @@ CROSS JOIN (
 ) AS total_krebs
 WHERE p.pathway_name = 'Krebs Cycle'
 GROUP BY o.organism_name, total_krebs.krebs_reaction_count
-HAVING (COUNT(DISTINCT r.reaction_id) * 100.0 / total_krebs.krebs_reaction_count) >= 0;
+HAVING krebs_coverage_percent >= 80;
 
 
 
@@ -103,6 +108,7 @@ JOIN organism o USING (organism_id)
 GROUP BY organism_id, atp_rxns, total_rxns
 HAVING pct_atp_rxns >= 20
 ORDER BY pct_atp_rxns DESC;
+
 
 
 
