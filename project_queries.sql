@@ -19,6 +19,7 @@ SHOW TABLES;
 
 
 -- Query 1
+-- As a percentage, how complete is each central metabolic path?
 WITH reaction_coverage AS (
     SELECT 
         o.organism_name,
@@ -47,6 +48,7 @@ ORDER BY avg_coverage DESC;
 
 
 -- Query 2
+-- Which reactions have enzyme catalysts or products that are sensitive to oxygen?
 SELECT
     o.organism_name,
     COUNT(r.reaction_letter_id) AS oxygen_labile_count
@@ -61,6 +63,8 @@ ORDER BY oxygen_labile_count DESC;
 
 
 -- Query 3
+-- Which microbes across the BiGG database contain at least 80% of genes
+-- specifically in the Krebs Cycle?
 SELECT 
     o.organism_name,
     ROUND((COUNT(DISTINCT r.reaction_id) * 100.0 / total_krebs.krebs_reaction_count)) AS krebs_coverage_percent
@@ -84,6 +88,7 @@ HAVING krebs_coverage_percent >= 80;
 
 
 -- Query 4
+-- Which organisms have the highest proportion of reactions that involve ATP/energy production?
 WITH 
 atp_rxns_per_org AS (SELECT o.organism_id, COUNT(ro.reaction_id) AS 'atp_rxns'
 						FROM organism o
@@ -113,6 +118,7 @@ ORDER BY pct_atp_rxns DESC;
 
 
 -- Query 5
+-- Which organisms have the most complete urea cycle, and which urea cycle reactions are found in the most organisms?
 WITH total_organism_count AS (
   SELECT COUNT(DISTINCT ro.organism_id) AS uc_organism_count
   FROM pathway p
