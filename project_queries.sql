@@ -13,7 +13,10 @@ SELECT * FROM rxn_met_join;
 SELECT * FROM rxn_org_join;
 SELECT * FROM org_gene_join;
 
+
 SHOW TABLES; 
+
+
 -- Query 1
 WITH reaction_coverage AS (
     SELECT 
@@ -30,9 +33,10 @@ WITH reaction_coverage AS (
 )
 SELECT
     organism_name,
-    (glycolysis_cov + krebs_cycle_cov + etc_cov + urea_cycle_cov + ferment_cov) / 50 AS avg_coverage
+    (glycolysis_cov + krebs_cycle_cov + etc_cov + urea_cycle_cov + ferment_cov) / 5000 AS avg_coverage
 FROM reaction_coverage
 ORDER BY avg_coverage DESC;
+
 
 
 
@@ -47,6 +51,7 @@ LEFT JOIN rxn_org_join ro ON o.organism_id = ro.organism_id
 LEFT JOIN reaction r ON ro.reaction_id = r.reaction_id
 GROUP BY o.organism_name
 ORDER BY oxygen_labile_count DESC;
+
 
 
 
@@ -73,37 +78,31 @@ HAVING (COUNT(DISTINCT r.reaction_id) * 100.0 / total_krebs.krebs_reaction_count
 
 
 
--- Query 4 - still working on it (carmen)
--- SELECT g.gene_id, g.gene_letter_id, g.gene_name, og.organism_id
--- FROM gene g
--- JOIN org_gene_join og USING (gene_id)
--- JOIN rxn_gene_join rg USING (gene_id)
--- JOIN pathway_rxn_join rp USING (reaction_id)
--- JOIN pathway p USING (pathway_id)
--- WHERE pathway_name = 'Electron Transport Chain'
--- ORDER BY gene_id;
-
--- SELECT p.pathway_id, p.pathway_name, r.reaction_id, r.reaction_letter_id
--- FROM pathway p
--- JOIN pathway_rxn_join pr USING (pathway_id)
--- JOIN reaction r USING (reaction_id);
-
--- -- for each pathway, how many organisms (models) contain reactions from the given pathway?
--- SELECT *
--- FROM pathway p
--- JOIN pathway_rxn_join pr USING (pathway_id)
--- JOIN reaction r USING (reaction_id)
--- JOIN rxn_org_join USING (reaction_id)
--- JOIN organism o USING (organism_id);
-
-
-
-
-
-
-
-
-
+-- Query 4
+WITH 
+atp_rxns_per_org AS (SELECT o.organism_id, COUNT(ro.reaction_id) AS 'atp_rxns'
+						FROM organism o
+						JOIN rxn_org_join ro ON o.organism_id = ro.organism_id
+						WHERE ro.reaction_id IN (SELECT r.reaction_id
+												FROM reaction r
+												JOIN rxn_met_join rm ON r.reaction_id = rm.reaction_id
+												JOIN metabolite m ON rm.metabolite_id = m.metabolite_id
+												WHERE metabolite_letter_id LIKE 'M\_%atp\_%'
+												   OR metabolite_letter_id LIKE 'M\_adp\_%')
+						GROUP BY o.organism_id),
+rxns_per_org AS (SELECT o.organism_id, COUNT(ro.reaction_id) AS 'total_rxns'
+					FROM organism o
+					JOIN rxn_org_join ro ON o.organism_id = ro.organism_id
+					GROUP BY o.organism_id)
+                    
+SELECT o.organism_id, o.organism_name, atp_rxns, total_rxns, 
+	   ROUND(atp_rxns/total_rxns * 100, 2) AS 'pct_atp_rxns'
+FROM atp_rxns_per_org
+JOIN rxns_per_org USING (organism_id)
+JOIN organism o USING (organism_id)
+GROUP BY organism_id, atp_rxns, total_rxns
+HAVING pct_atp_rxns >= 20
+ORDER BY pct_atp_rxns DESC;
 
 
 

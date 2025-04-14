@@ -1,0 +1,5 @@
+reaction_id,reaction_name,associated_genes,associated_metabolites,reaction_organism_count,uc_organism_count,coverage_percent
+824,"Argininosuccinate lyase",ArgH,"Fumarate,L-Arginine,N(omega)-(L-Arginino)succinate",96,96,100.00
+825,"Argininosuccinate synthase",None,"AMP C10H12N5O7P,ATP C10H12N5O13P3,Diphosphate,H+,L-Aspartate,L-Citrulline,N(omega)-(L-Arginino)succinate",94,96,97.92
+668,"Acetylornithine transaminase","ArgD,AstC","2-Oxoglutarate,L-Glutamate,N-Acetyl-L-glutamate 5-semialdehyde,N2-Acetyl-L-ornithine",87,96,90.63
+820,"Arginine decarboxylase","Adi,SpeA","Agmatine,CO2 CO2,H+,L-Arginine",84,96,87.50

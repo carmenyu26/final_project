@@ -8,9 +8,6 @@ CREATE DATABASE metabolic_pathways;
 USE metabolic_pathways;
 SHOW TABLES;
 
-SHOW VARIABLES;
-SHOW VARIABLES LIKE '%local%';
--- SET GLOBAL local_infile=ON;
 
 
 -- ignore
@@ -103,8 +100,8 @@ SELECT * FROM metabolite;
 DROP TABLE IF EXISTS reaction;
 CREATE TABLE reaction (
 	reaction_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    reaction_letter_id VARCHAR(20) NOT NULL UNIQUE,
-    reaction_name VARCHAR(70) NOT NULL
+    reaction_letter_id VARCHAR(90) NOT NULL,
+    reaction_name VARCHAR(205) NOT NULL
 );
 -- load data from python script
 -- check reaction table
@@ -181,9 +178,7 @@ CREATE TABLE org_gene_join (
 );
 -- load data
 -- check org_gene join table
-SELECT organism_id, COUNT(*) as 'num_genes' 
-FROM org_gene_join
-GROUP BY organism_id;
+SELECT * FROM org_gene_join;
 
 
 -- use metabolic_pathways db
@@ -201,7 +196,3 @@ SELECT * FROM rxn_gene_join;
 SELECT * FROM rxn_met_join;
 SELECT * FROM rxn_org_join;
 SELECT * FROM org_gene_join;
-
-
-
--- SELECT * FROM INFORMATION_SCHEMA.COLUMNS;   -- ignore: this is just to check datatype of column
